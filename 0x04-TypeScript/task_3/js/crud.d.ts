@@ -1,7 +1,10 @@
-import { RowID, RowElement} from './interface'
+// crud.d.ts
+/// <reference path="interface.ts" />
 
-export function insertRow(row: RowElement): number;
+import { RowID, RowElement } from './interface';
 
-export function deletetRow(rowId: RowID): void;
-
-export function updateRow(rowId: RowID, row: RowElement): RowID;
+declare module 'crud' {
+  export function insertRow(row: RowElement): RowID;
+  export function deleteRow(rowId: RowID): void;
+  export function updateRow(rowId: RowID, row: RowElement): RowID;
+}

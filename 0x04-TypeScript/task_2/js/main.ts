@@ -1,68 +1,77 @@
-export interface DirectorInterface {
-  workFromHome(): string;
-  getCoffeeBreak(): string;
-  workDirectorTasks(): string;
-}
-
-export interface TeacherInterface {
-  workFromHome(): string;
-  getCoffeeBreak(): string;
-  workTeacherTasks(): string;
-}
-
-export class Director implements DirectorInterface {
-  workFromHome() {
-    return 'Working from home';
+// main.ts
+interface DirectorInterface {
+    workFromHome(): string;
+    getCoffeeBreak(): string;
+    workDirectorTasks(): string;
   }
-
-  getCoffeeBreak() {
-    return 'Getting a coffee break';
+  
+  interface TeacherInterface {
+    workFromHome(): string;
+    getCoffeeBreak(): string;
+    workTeacherTasks(): string;
   }
-
-  workDirectorTasks() {
-    return 'Getting to director tasks';
+  
+  class Director implements DirectorInterface {
+    workFromHome(): string {
+      return 'Working from home';
+    }
+  
+    getCoffeeBreak(): string {
+      return 'Getting a coffee break';
+    }
+  
+    workDirectorTasks(): string {
+      return 'Getting to director tasks';
+    }
   }
-}
-
-export class Teacher implements TeacherInterface {
-  workFromHome() {
-    return 'Cannot work from home';
+  
+  class Teacher implements TeacherInterface {
+    workFromHome(): string {
+      return 'Cannot work from home';
+    }
+  
+    getCoffeeBreak(): string {
+      return 'Cannot have a break';
+    }
+  
+    workTeacherTasks(): string {
+      return 'Getting to work';
+    }
   }
-
-  getCoffeeBreak() {
-    return 'Cannot have a break';
+  
+  function createEmployee(salary: number | string): Director | Teacher {
+    if (typeof salary === 'number' && salary < 500) {
+      return new Teacher();
+    }
+    return new Director();
   }
-
-  workTeacherTasks() {
-    return 'Getting to work';
+  
+  function isDirector(employee: Director | Teacher): employee is Director {
+    return employee instanceof Director;
   }
-}
-
-export function createEmployee(salary: (number | string)): (Director | Teacher) {
-  if (typeof salary === 'number' && salary < 500) {
-    return new Teacher();
+  
+  function executeWork(employee: Director | Teacher): string {
+    if (isDirector(employee)) {
+      return employee.workDirectorTasks();
+    }
+    return employee.workTeacherTasks();
   }
-  return new Director();
-}
-
-export function isDirector(employee: (Director | Teacher)) {
-  return employee instanceof Director;
-}
-
-export function executeWork(employee: (Director | Teacher)) {
-  if (isDirector(employee)) {
-    return (employee as Director).workDirectorTasks();
+  
+  // String literal type
+  type Subjects = 'Math' | 'History';
+  
+  function teachClass(todayClass: Subjects): string {
+    if (todayClass === 'Math') {
+      return 'Teaching Math';
+    } else if (todayClass === 'History') {
+      return 'Teaching History';
+    }
+    return ''; // This line is technically unreachable due to the type constraint
   }
-  return (employee as Teacher).workTeacherTasks();
-}
-
-export type Subjects = ('Math' | 'History');
-
-export function teachClass(todayClass: Subjects): string {
-  if (todayClass === 'Math') {
-    return 'Teaching Math';
-  }
-  if (todayClass === 'History') {
-    return 'Teaching History';
-  }
-}
+  
+  // Test cases
+  console.log(executeWork(createEmployee(200))); // Output: Getting to work
+  console.log(executeWork(createEmployee(1000))); // Output: Getting to director tasks
+  console.log(teachClass('Math'));     // Output: Teaching Math
+  console.log(teachClass('History'));  // Output: Teaching History
+  

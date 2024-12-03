@@ -1,14 +1,19 @@
 import { uploadPhoto, createUser } from './utils';
 
 export default async function asyncUploadUser() {
-  let res = {};
+  let responseObject = {}; // Renamed variable for clarity
 
   try {
-    const photo = await uploadPhoto();
-    const user = await createUser();
-    res = { photo, user };
-  } catch (err) {
-    res = { photo: null, user: null };
+    // Await responses and assign to separate variables
+    const photoResponse = await uploadPhoto();
+    const userResponse = await createUser();
+
+    // Populate the responseObject with the results
+    responseObject = { photo: photoResponse, user: userResponse };
+  } catch (error) {
+    // If an error occurs, assign null values to photo and user
+    responseObject = { photo: null, user: null };
   }
-  return res;
+
+  return responseObject; // Return the final response object
 }
